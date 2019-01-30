@@ -2,7 +2,7 @@ import { FETCHING_RESTAURANTS, FETCHED_RESTAURANTS, UNFETCH_RESTAURANTS } from "
 
 const initialState = {
     restaurants: [],
-	loadingRestaurants: false,
+	loadingRestaurants: false
 	
 }
 

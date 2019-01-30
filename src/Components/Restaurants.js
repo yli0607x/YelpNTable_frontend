@@ -2,29 +2,43 @@ import React, { Component } from 'react'
 import '../App.css';
 import { connect } from "react-redux";
 import { fetchRestaurants } from '../actions/action'
+import RestaurantProfile from './RestaurantProfile'
 
 
 class Restaurants extends Component {
+
+  constructor(props){
+    super(props);
+    this.state = {
+      restaurantId : ""
+    }
+  }
 
   componentDidMount() {
     this.props.fetchRestaurants()
   }
 
+  handleOpen = (event) => {
+    //console.log(event.target.id)
+    this.setState({ restaurantId: event.target.id})
+  };
+
+  handleClear = () => {
+    this.setState({ restaurantId: ""})
+  }
+
   renderRestaurants = () => {
     return this.props.restaurants.map(restaurant => (
-      <div>{restaurant.name}</div>
+      <div onClick={this.handleOpen} key={restaurant.id} id={restaurant.id} >{restaurant.name}</div>
     )
 
     )
   }
 
   render() {
-     console.log("what is props.restaurants", this.props.restaurants)
-    return (
-     <div>
-         {this.renderRestaurants()}
-     </div>
-    )
+     //console.log("what is props.restaurants", this.props.restaurants)
+    return this.state.restaurantId ? <RestaurantProfile handleClear={this.handleClear} restaurant={this.props.restaurants[this.state.restaurantId-1]}/> : <div>{this.renderRestaurants()}</div>
+
   }
 }
 const mapStateToProps = (state) => {
