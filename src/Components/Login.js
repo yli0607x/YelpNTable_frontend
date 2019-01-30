@@ -40,7 +40,7 @@ class Login extends React.Component {
         </Header>
         {this.props.failedLogin ? <p>{this.props.error}</p> : null}
         <Form size='large' onSubmit={this.handleLoginSubmit}>
-        <Form.Input fluid icon='user' iconPosition='left' name="username" value={this.state.user_name} type="text" placeholder="Name" onChange={this.handleChange} />
+        <Form.Input fluid icon='user' iconPosition='left' name="user_name" value={this.state.user_name} type="text" placeholder="Name" onChange={this.handleChange} />
         <Form.Input fluid icon='lock' iconPosition='left' name="password" value={this.state.password} type="password" placeholder="Password" onChange={this.handleChange}/>
         <Button fluid size='large'>
               Login
