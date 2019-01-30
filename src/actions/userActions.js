@@ -3,7 +3,7 @@ import {  SET_CURRENT_USER, AUTHENTICATING_USER, FAILED_LOGIN, LOGOUT_USER} from
 export const LoginUser=(user_name, password) =>{
 	return (dispatch) => { //this comes from thunk technically we cant return a fn in action creators
     dispatch({type: AUTHENTICATING_USER})
-		fetch(`http://localhost:4000/api/v1/users`, {
+		fetch(`http://localhost:4000/api/v1/login`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',

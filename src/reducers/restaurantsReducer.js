@@ -1,8 +1,9 @@
-import { FETCHING_RESTAURANTS, FETCHED_RESTAURANTS, UNFETCH_RESTAURANTS } from "./types";
+import { FETCHING_RESTAURANTS, FETCHED_RESTAURANTS, UNFETCH_RESTAURANTS, ADD_REVIEW} from "./types";
 
 const initialState = {
     restaurants: [],
-	loadingRestaurants: false
+	loadingRestaurants: false,
+	addedReview: false,
 	
 }
 
@@ -15,6 +16,8 @@ const restaurantsReducer = (state = initialState, action) => {
 			return { ...state, loadingRestaurants: false, restaurants: action.payload.restaurants}
 		case UNFETCH_RESTAURANTS: //tells the app we're fetching
 			return { ...state, restaurants: []}
+		case ADD_REVIEW:
+			return { ...state, loadingRestaurants: false, addedReview: true };
 		default:
 			return state
 	}

@@ -37,14 +37,16 @@ class Restaurants extends Component {
 
   render() {
      //console.log("what is props.restaurants", this.props.restaurants)
-    return this.state.restaurantId ? <RestaurantProfile handleClear={this.handleClear} restaurant={this.props.restaurants[this.state.restaurantId-1]}/> : <div>{this.renderRestaurants()}</div>
+    return this.state.restaurantId ? <RestaurantProfile handleClear={this.handleClear} reviews={this.props.reviews} user={this.props.user} restaurant={this.props.restaurants[this.state.restaurantId-1]}/> : <div>{this.renderRestaurants()}</div>
 
   }
 }
 const mapStateToProps = (state) => {
-  console.log("inside restaurants what is state", state)
+  console.log("inside restaurants what is state", state.restaurants)
    return{
-      restaurants: state.restaurants.restaurants
+      restaurants: state.restaurants.restaurants,
+      user: state.user.user,
+      reviews: state.restaurants.restaurants.reviews
    }
  }
 
