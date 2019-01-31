@@ -15,7 +15,7 @@ class RestaurantProfile extends Component {
       star: "",
       restaurant: this.props.restaurant,
       partySize: "",
-      date: new Date(),
+      time: new Date().toISOString(),
       message: "",
       reviewOpen: false,
       reservationOpen: false
@@ -58,7 +58,7 @@ class RestaurantProfile extends Component {
           restaurant_id: this.props.id,
           user_id: this.props.user.id,
           party_size: this.state.partySize,
-          date: this.state.date, 
+          time: this.state.time, 
           message: this.state.message
         })
       }) 
@@ -74,7 +74,7 @@ class RestaurantProfile extends Component {
 
   handleChangeDate = (event) => {
     this.setState({
-      date: event
+      time: event
     });
   }
 
@@ -112,16 +112,8 @@ class RestaurantProfile extends Component {
         <input type="text" name="partySize" placeholder="Party Size" onChange={this.handleChange}/>
       </div>
       <div className="field">
-        <label>Date and Time</label>
-        <DatePicker
-          selected={this.state.date}
-          onChange={this.handleChangeDate}
-          showTimeSelect
-          timeFormat="HH:mm"
-          timeIntervals={15}
-          dateFormat="MMMM d, yyyy h:mm aa"
-          timeCaption="time"
-        />
+        <label>Date</label>
+        <input type="datetime-local" name="time" value={this.state.time} step="0" onChange={this.handleChange}/>
       </div>
       <div className="field">
         <label>Message</label>
@@ -151,7 +143,7 @@ class RestaurantProfile extends Component {
   render() {
     //console.log("what is reservation date in profile", this.state.date)
     //debugger
-    console.log("what is review open", this.state.reservationOpen)
+    console.log("what is date", this.state.time)
     return (
      <div>
       Restaurant Name: {this.state.restaurant.name}
