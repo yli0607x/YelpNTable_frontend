@@ -9,7 +9,7 @@ const initialState = {
 }
 
 const userReducer = (state = initialState, action) => {
-	console.log('%c userReducer', 'color: blue', state, action);
+	//console.log('%c userReducer', 'color: blue', state, action);
 	switch (action.type) {
 		case SET_CURRENT_USER:
 			return { ...state, user: action.payload, isLoggedIn: true, authenticatingUser:false }

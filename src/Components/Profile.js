@@ -18,6 +18,8 @@ class Profile extends Component {
       title: "", 
       comment: "", 
       star: "",
+      reviewOpen: false,
+      reviewId: "",
     }
   }
 
@@ -49,7 +51,7 @@ class Profile extends Component {
         <div>Comment:{review.comment}</div>
         <div>Star:{review.star}</div>
         <Button id={review.id} onClick={this.handleDeleteReview}>Delete</Button>
-        <Modal trigger={<Button id={review.id} onClick={this.handleEditReviewSetState}>Edit</Button>} open={this.state.ReviewOpen} onClose={this.reviewClose} >
+        <Modal trigger={<Button id={review.id} onClick={this.handleEditReviewSetState}>Edit</Button>} open={this.state.ReviewOpen} >
           <Modal.Content >
             <form className="ui form" onSubmit={this.handleSubmitReview} style={{ maxWidth: 400, marginLeft: "auto", marginRight: "auto", display: "block" }}>
             <div className="field">
@@ -64,13 +66,35 @@ class Profile extends Component {
               <label>Rating</label>
               <input type="text" name="star" placeholder={this.state.star} onChange={this.handleChange}/>
             </div>
-            <button className="ui button" type="submit" onClick={this.reviewClose} >Submit</button>
+            <button className="ui button" type="submit" onClick={this.handleSubmitReview} >Submit</button>
           </form>
           </Modal.Content>
         </Modal>
       </div>
     )) 
   } 
+
+  handleSubmitReview = (e) => {
+    e.preventDefault()
+    this.reviewClose()
+    fetch(`http://localhost:4000/api/v1/users/${this.props.id}/reviews/${this.state.reviewId}`, {
+        method: 'PATCH',
+        headers: {
+        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: this.state.title,
+          comment: this.state.comment, 
+          star: this.state.star
+        })
+      }) 
+      .then(r => r.json())
+      .then((data) => this.setState({ reviews: data}))
+  }
+
+  reviewClose = () => this.setState({ ReviewOpen: false })
 
   handleEditReviewSetState = (event) => {
     var review = this.state.reviews.find(review => review.id === parseInt(event.target.id))

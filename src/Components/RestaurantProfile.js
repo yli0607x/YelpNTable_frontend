@@ -46,6 +46,7 @@ class RestaurantProfile extends Component {
 
   handleSubmitReservation = (e) => {
     e.preventDefault()
+    this.reservationClose()
     fetch(`http://localhost:4000/api/v1/users/${this.props.user.id}/reservations`, {
         method: 'POST',
         headers: {
@@ -77,10 +78,11 @@ class RestaurantProfile extends Component {
     });
   }
 
-  reviewClose = () => this.setState({ ReviewOpen: false })
+  reviewClose = () => this.setState({ reviewOpen: false })
+  reservationClose = () => this.setState({ reservationOpen: false})
 
   renderReviewForm = () => {
-    return  <Modal trigger={<Button>Write a Review</Button>} open={this.state.ReviewOpen} onClose={this.reviewClose} >
+    return  <Modal trigger={<Button onClick={() => this.setState({ reviewOpen: true })} >Write a Review</Button>} open={this.state.reviewOpen} onClose={this.reviewClose} closeIcon>
     <Modal.Content >
       <form className="ui form" onSubmit={this.handleSubmitReview} style={{ maxWidth: 400, marginLeft: "auto", marginRight: "auto", display: "block" }}>
       <div className="field">
@@ -102,7 +104,7 @@ class RestaurantProfile extends Component {
   }
 
   renderReservationForm = () => {
-    return  <Modal trigger={<Button>Make a Reservation</Button>}>
+    return  <Modal trigger={<Button onClick={() => this.setState({ reservationOpen: true })} >Make a Reservation</Button>} open={this.state.reservationOpen} onClose={this.reservationClose} closeIcon>
       <Modal.Content>
       <form className="ui form" onSubmit={this.handleSubmitReservation} style={{ maxWidth: 400, marginLeft: "auto", marginRight: "auto", display: "block" }}>
       <div className="field">
@@ -125,7 +127,7 @@ class RestaurantProfile extends Component {
         <label>Message</label>
         <input type="text" name="message" placeholder="Optional Message" onChange={this.handleChange}/>
       </div>
-      <button className="ui button" type="submit" onClick={this.props.handleRefetch}>Submit</button>
+      <button className="ui button" type="submit" onClick={this.handleSubmitReservation}>Submit</button>
     </form>
     </Modal.Content>
   </Modal>
@@ -149,6 +151,7 @@ class RestaurantProfile extends Component {
   render() {
     //console.log("what is reservation date in profile", this.state.date)
     //debugger
+    console.log("what is review open", this.state.reservationOpen)
     return (
      <div>
       Restaurant Name: {this.state.restaurant.name}

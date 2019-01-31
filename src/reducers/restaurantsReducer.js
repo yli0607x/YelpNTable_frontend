@@ -9,7 +9,7 @@ const initialState = {
 }
 
 const restaurantsReducer = (state = initialState, action) => {
-	console.log('%c restaurantsReducer', 'color: pink', state, action);
+	//console.log('%c restaurantsReducer', 'color: pink', state, action);
 	switch (action.type) {
 		case FETCHING_RESTAURANTS: //tells the app we're fetching
 			return { ...state, loadingRestaurants: true }
