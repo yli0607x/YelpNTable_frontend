@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import '../App.css';
 import { connect } from "react-redux";
-import { fetchRestaurants, selectThisRestaurant } from '../actions/action'
+// import { fetchRestaurants, selectThisRestaurant } from '../actions/action'
 import RestaurantProfile from './RestaurantProfile'
 import NavBar from './NavBar'
 import { Redirect } from "react-router-dom";
-
+import '../css/restaurant.css'
 
 class Restaurants extends Component {
 
@@ -41,11 +41,20 @@ class Restaurants extends Component {
 
   renderRestaurants = () => {
     console.log(this.state.restaurants);
-    debugger
     return this.state.restaurants.map(restaurant => (
-      <div className="restaurantImage">{restaurant.name}
-        <img onClick={this.handleOpen} key={restaurant.id} id={restaurant.id} alt={restaurant.id} src={restaurant.restaurant_photo} />
-      </div>
+      
+ 
+        <div className="article">
+        <span className="caption" onClick={this.handleOpen} id={restaurant.id} key={restaurant.id} >
+          <span className="caption-content">
+          <h1 className="article-title"> {restaurant.name} </h1>
+          <p className="article-address"> {restaurant.address} </p>
+          </span>
+        </span>
+        <img className="article-img" alt={restaurant.id} src={restaurant.restaurant_photo} />
+        </div>
+      
+     
     )
 
     )
@@ -59,9 +68,11 @@ class Restaurants extends Component {
     <RestaurantProfile handleClear={this.handleClear} user={this.props.user} id={this.state.restaurantId} restaurant={this.state.restaurants[this.state.restaurantId-1]}/> 
     </div>
     : 
-    <div>
+    <div >
     <NavBar />
-    {this.renderRestaurants()}
+        <div className="cards">
+        {this.renderRestaurants()}
+        </div>
     </div> : <Redirect to="/login" />
 
 
