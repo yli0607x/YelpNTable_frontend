@@ -24,6 +24,7 @@ class RestaurantProfile extends Component {
 
   handleSubmitReview = (e) => {
     e.preventDefault()
+    this.reviewClose()
     fetch(`http://localhost:4000/api/v1/restaurants/${this.props.id}/reviews`, {
         method: 'POST',
         headers: {
@@ -94,7 +95,7 @@ class RestaurantProfile extends Component {
         <label>Rating</label>
         <input type="text" name="star" placeholder="Rating" onChange={this.handleChange}/>
       </div>
-      <button className="ui button" type="submit" onClose={this.reviewClose} >Submit</button>
+      <button className="ui button" type="submit" onClick={this.handleSubmitReview} >Submit</button>
     </form>
     </Modal.Content>
   </Modal>

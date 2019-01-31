@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import '../App.css';
 import NavBar from './NavBar'
 import { connect } from "react-redux";
+import { Button, Header, Image, Modal } from 'semantic-ui-react'
+import { withRouter, Redirect } from "react-router";
 
 const restaurants = ["Chef's Table at Brooklyn Fare",'Peter Luger','Carbone', 'Uchu', 'Root & Bone', 'Turntable Chicken Jazz', 'Obao', 'La Contena']
 
@@ -13,6 +15,9 @@ class Profile extends Component {
       reviews: [],
       user: [], 
       reservations: [],
+      title: "", 
+      comment: "", 
+      star: "",
     }
   }
 
@@ -43,10 +48,43 @@ class Profile extends Component {
         <div>Title:{review.title}</div>
         <div>Comment:{review.comment}</div>
         <div>Star:{review.star}</div>
-        <button id={review.id} onClick={this.handleDeleteReview}>Delete</button>
+        <Button id={review.id} onClick={this.handleDeleteReview}>Delete</Button>
+        <Modal trigger={<Button id={review.id} onClick={this.handleEditReviewSetState}>Edit</Button>} open={this.state.ReviewOpen} onClose={this.reviewClose} >
+          <Modal.Content >
+            <form className="ui form" onSubmit={this.handleSubmitReview} style={{ maxWidth: 400, marginLeft: "auto", marginRight: "auto", display: "block" }}>
+            <div className="field">
+              <label>Title</label>
+              <input type="text" name="title" placeholder={this.state.title} onChange={this.handleChange}/>
+            </div>
+            <div className="field">
+              <label>Comments</label>
+              <input type="text" name="comment" placeholder={this.state.comment} onChange={this.handleChange}/>
+            </div>
+            <div className="field">
+              <label>Rating</label>
+              <input type="text" name="star" placeholder={this.state.star} onChange={this.handleChange}/>
+            </div>
+            <button className="ui button" type="submit" onClick={this.reviewClose} >Submit</button>
+          </form>
+          </Modal.Content>
+        </Modal>
       </div>
     )) 
   } 
+
+  handleEditReviewSetState = (event) => {
+    var review = this.state.reviews.find(review => review.id === parseInt(event.target.id))
+    this.setState({
+      title: review.title,
+      comment: review.comment,
+      star: review.star, 
+      reviewId: review.id
+    }, ()=> {console.log("after setstate", this.state.title)})
+  }
+
+  handleChange = (event) => {
+    this.setState({[event.target.name]: event.target.value})
+  }
 
   renderReservations = () => {
     return this.state.reservations.map(reservation => (
@@ -90,14 +128,15 @@ class Profile extends Component {
   render() {
    //console.log("are restaurants coming in?", this.props)
    //debugger
-    return (
+   //console.log("inside profile", this.props.isLoggedIn)
+    return this.props.isLoggedIn === true ?
       <div>
       <NavBar />
       {this.renderUserInfo()}
       {this.renderReviews()}
       {this.renderReservations()}
-      </div>
-    )
+      </div> : <Redirect to="/login" />
+    
   }
 }
 
@@ -105,6 +144,7 @@ const mapStateToProps = (state) => {
   //console.log("inside restaurants what is state", state)
    return{
       id: state.user.user.id,
+      isLoggedIn: state.user.isLoggedIn,
    }
  }
 
