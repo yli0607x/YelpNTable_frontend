@@ -80,7 +80,7 @@ class RestaurantProfile extends Component {
   reviewClose = () => this.setState({ ReviewOpen: false })
 
   renderReviewForm = () => {
-    return  <Modal trigger={<Button>Write a Review</Button>} open={this.state.ReviewOpen} onClose={this.reviewClose} >
+    return  <Modal trigger={<Button>Write a Review</Button>} open={this.state.ReviewOpen}  >
     <Modal.Content >
       <form className="ui form" onSubmit={this.handleSubmitReview} style={{ maxWidth: 400, marginLeft: "auto", marginRight: "auto", display: "block" }}>
       <div className="field">
