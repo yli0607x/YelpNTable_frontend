@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { fetchRestaurants, selectThisRestaurant } from '../actions/action'
 import RestaurantProfile from './RestaurantProfile'
 import NavBar from './NavBar'
+import { Redirect } from "react-router-dom";
 
 
 class Restaurants extends Component {
@@ -48,7 +49,7 @@ class Restaurants extends Component {
 
   render() {
      //console.log("what is props.restaurants", this.props.restaurants)
-    return this.state.restaurantId ? 
+    return this.props.isLoggedIn === true ? this.state.restaurantId ? 
     <div>
     <NavBar handleClear={this.handleClear}/>
     <RestaurantProfile handleClear={this.handleClear} user={this.props.user} id={this.state.restaurantId} restaurant={this.state.restaurants[this.state.restaurantId-1]}/> 
@@ -57,7 +58,8 @@ class Restaurants extends Component {
     <div>
     <NavBar />
     {this.renderRestaurants()}
-    </div>
+    </div> : <Redirect to="/login" />
+
 
   }
 }
@@ -65,6 +67,7 @@ const mapStateToProps = (state) => {
   console.log("inside restaurants what is state", state)
    return{
       user: state.user.user,
+      isLoggedIn: state.user.isLoggedIn,
    }
  }
 
