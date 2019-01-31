@@ -88,7 +88,7 @@ class Profile extends Component {
 
 
   render() {
-   console.log("are restaurants coming in?", this.props)
+   //console.log("are restaurants coming in?", this.props)
    //debugger
     return (
       <div>
@@ -102,7 +102,7 @@ class Profile extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log("inside restaurants what is state", state)
+  //console.log("inside restaurants what is state", state)
    return{
       id: state.user.user.id,
    }

@@ -47,7 +47,7 @@ class SignUp extends React.Component {
     <Grid textAlign='center' style={{ height: '100%' }} verticalAlign='middle'>
         <Grid.Column style={{ maxWidth: 400 }}>
         <Segment stacked>
-        <Image src='./images/login-logo.png' width='200px' verticalAlign='middle'/> 
+        {/* <Image src='./images/login-logo.png' width='200px' verticalAlign='middle'/>  */}
         <Header as='h1' color='grey' textAlign='center'>
         Sign Up
         </Header>

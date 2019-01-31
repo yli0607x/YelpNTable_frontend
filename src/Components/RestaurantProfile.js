@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import '../App.css';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { Button, Header, Image, Modal } from 'semantic-ui-react'
 
 
 class RestaurantProfile extends Component {
@@ -16,6 +17,8 @@ class RestaurantProfile extends Component {
       partySize: "",
       date: new Date(),
       message: "",
+      reviewOpen: false,
+      reservationOpen: false
     }
   }
 
@@ -73,48 +76,58 @@ class RestaurantProfile extends Component {
     });
   }
 
+  reviewClose = () => this.setState({ ReviewOpen: false })
 
   renderReviewForm = () => {
-    return  <form className="ui form" onSubmit={this.handleSubmitReview} style={{ maxWidth: 400 }}>
-    <div className="field">
-      <label>Title</label>
-      <input type="text" name="title" placeholder="Title" onChange={this.handleChange}/>
-    </div>
-    <div className="field">
-      <label>Comments</label>
-      <input type="text" name="comment" placeholder="Comments" onChange={this.handleChange}/>
-    </div>
-    <div className="field">
-      <label>Rating</label>
-      <input type="text" name="star" placeholder="Rating" onChange={this.handleChange}/>
-    </div>
-    <button className="ui button" type="submit">Submit</button>
-  </form>
+    return  <Modal trigger={<Button>Write a Review</Button>} open={this.state.ReviewOpen} onClose={this.reviewClose} >
+    <Modal.Content >
+      <form className="ui form" onSubmit={this.handleSubmitReview} style={{ maxWidth: 400, marginLeft: "auto", marginRight: "auto", display: "block" }}>
+      <div className="field">
+        <label>Title</label>
+        <input type="text" name="title" placeholder="Title" onChange={this.handleChange}/>
+      </div>
+      <div className="field">
+        <label>Comments</label>
+        <input type="text" name="comment" placeholder="Comments" onChange={this.handleChange}/>
+      </div>
+      <div className="field">
+        <label>Rating</label>
+        <input type="text" name="star" placeholder="Rating" onChange={this.handleChange}/>
+      </div>
+      <button className="ui button" type="submit" onClose={this.reviewClose} >Submit</button>
+    </form>
+    </Modal.Content>
+  </Modal>
   }
 
   renderReservationForm = () => {
-    return  <form className="ui form" onSubmit={this.handleSubmitReservation} style={{ maxWidth: 400 }}>
-    <div className="field">
-      <label>Party Size</label>
-      <input type="text" name="partySize" placeholder="Party Size" onChange={this.handleChange}/>
-    </div>
-    <div className="field">
-      <DatePicker
-        selected={this.state.date}
-        onChange={this.handleChangeDate}
-        showTimeSelect
-        timeFormat="HH:mm"
-        timeIntervals={15}
-        dateFormat="MMMM d, yyyy h:mm aa"
-        timeCaption="time"
-      />
-    </div>
-    <div className="field">
-      <label>Message</label>
-      <input type="text" name="message" placeholder="Optional Message" onChange={this.handleChange}/>
-    </div>
-    <button className="ui button" type="submit" onClick={this.props.handleRefetch}>Submit</button>
-  </form>
+    return  <Modal trigger={<Button>Make a Reservation</Button>}>
+      <Modal.Content>
+      <form className="ui form" onSubmit={this.handleSubmitReservation} style={{ maxWidth: 400, marginLeft: "auto", marginRight: "auto", display: "block" }}>
+      <div className="field">
+        <label>Party Size</label>
+        <input type="text" name="partySize" placeholder="Party Size" onChange={this.handleChange}/>
+      </div>
+      <div className="field">
+        <label>Date and Time</label>
+        <DatePicker
+          selected={this.state.date}
+          onChange={this.handleChangeDate}
+          showTimeSelect
+          timeFormat="HH:mm"
+          timeIntervals={15}
+          dateFormat="MMMM d, yyyy h:mm aa"
+          timeCaption="time"
+        />
+      </div>
+      <div className="field">
+        <label>Message</label>
+        <input type="text" name="message" placeholder="Optional Message" onChange={this.handleChange}/>
+      </div>
+      <button className="ui button" type="submit" onClick={this.props.handleRefetch}>Submit</button>
+    </form>
+    </Modal.Content>
+  </Modal>
   }
 
 
@@ -122,9 +135,9 @@ class RestaurantProfile extends Component {
   renderReviews = () => {
       return this.state.restaurant.reviews.map(review => (
         <div key={review.id}>
-          <div>{review.title}</div>
-          <div>{review.comment}</div>
-          <div>{review.star}</div>
+          <div>Title: {review.title}</div>
+          <div>Comment: {review.comment}</div>
+          <div>Star: {review.star}</div>
         </div>
       )) 
   }
@@ -133,18 +146,25 @@ class RestaurantProfile extends Component {
 
   
   render() {
-    console.log("what is reservation date in profile", this.state.date)
+    //console.log("what is reservation date in profile", this.state.date)
     //debugger
     return (
      <div>
-      {this.state.restaurant.name}
-      {this.state.restaurant.address}
-      {this.state.restaurant.description}
-      <button onClick={this.props.handleClear}>return to restaurants</button>
-      {this.renderReviewForm()}
-      My Reviews
+      Restaurant Name: {this.state.restaurant.name}
+      <br></br>
+      <br></br>
+      Restaurant Address: {this.state.restaurant.address}
+      <br></br>
+      <br></br>
+      Restaurant Description: {this.state.restaurant.description}
+      <br></br>
+      <br></br>
+      Reviews
       {this.renderReviews()}
-      My Reservations
+      <hr></hr>
+      {this.renderReviewForm()}
+      <br></br>
+      <br></br>
       {this.renderReservationForm()}
      </div>
     )

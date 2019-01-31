@@ -34,7 +34,7 @@ class Login extends React.Component {
     <Grid textAlign='center' style={{ height: '100%' }} verticalAlign='middle'>
         <Grid.Column style={{ maxWidth: 400 }}>
         <Segment stacked>
-        <Image src='./images/login-logo.png' width='200px' verticalAlign='middle'/> 
+        {/* <Image src='./images/login-logo.png' width='200px' verticalAlign='middle'/>  */}
         <Header as='h1' color='grey' textAlign='center'>
         Sign in
         </Header>
@@ -57,7 +57,7 @@ class Login extends React.Component {
 
   render() {
     //console.log("inside login", this.state.user)
-    console.log("login- loggedIn", this.props.isLoggedIn)
+    //console.log("login- loggedIn", this.props.isLoggedIn)
     return this.props.isLoggedIn ? <Redirect to="/restaurants" /> : this.renderLoginForm()
   }
 }
@@ -70,7 +70,7 @@ class Login extends React.Component {
 // })
 
 const mapStateToProps = (state) => {
-  console.log("inside login", state)
+  //console.log("inside login", state)
   return{
       authenticatingUser: state.user.authenticatingUser,
       failedLogin: state.user.failedLogin,
