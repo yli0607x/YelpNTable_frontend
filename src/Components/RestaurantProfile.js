@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import '../App.css';
-import { connect } from "react-redux";
-import { addReview } from "../actions/action";
-import { fetchRestaurants } from '../actions/action'
+
 
 class RestaurantProfile extends Component {
 
@@ -11,13 +9,30 @@ class RestaurantProfile extends Component {
     this.state = {
       title : "",
       comment: "", 
-      star: ""
+      star: "",
+      restaurant: this.props.restaurant,
     }
   }
 
   handleSubmitReview = (e) => {
     e.preventDefault()
-    this.props.addReview(this.props.restaurant.id, this.props.user.id, this.state.title, this.state.comment, this.state.star);
+    fetch(`http://localhost:4000/api/v1/restaurants/${this.props.id}/reviews`, {
+        method: 'POST',
+        headers: {
+        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          restaurant_id: this.props.id,
+          user_id: this.props.user.id,
+          title: this.state.title,
+          comment: this.state.comment, 
+          star: this.state.star
+        })
+      }) 
+      .then(r => r.json())
+      .then((data) => this.setState({ restaurant: data}))
     
   }
 
@@ -39,29 +54,33 @@ class RestaurantProfile extends Component {
       <label>Rating</label>
       <input type="text" name="star" placeholder="Rating" onChange={this.handleChange}/>
     </div>
-    <button className="ui button" type="submit" >Submit</button>
+    <button className="ui button" type="submit" onClick={this.props.handleRefetch}>Submit</button>
   </form>
   }
 
+
+
   renderReviews = () => {
-    return this.props.restaurant.reviews.map(review => (
-      <div key={review.id}>
-        <div>{review.title}</div>
-        <div>{review.comment}</div>
-        <div>{review.star}</div>
-      </div>
-    ))
+      return this.state.restaurant.reviews.map(review => (
+        <div key={review.id}>
+          <div>{review.title}</div>
+          <div>{review.comment}</div>
+          <div>{review.star}</div>
+        </div>
+      )) 
   }
+  
   
 
   
   render() {
-    console.log("what is review in restaurant profile", this.props.restaurant.reviews)
+    console.log("what is restaurant in profile", this.state.restaurant.reviews)
+    //debugger
     return (
      <div>
-      {this.props.restaurant.name}
-      {this.props.restaurant.address}
-      {this.props.restaurant.description}
+      {this.state.restaurant.name}
+      {this.state.restaurant.address}
+      {this.state.restaurant.description}
       <button onClick={this.props.handleClear}>return to restaurants</button>
       {this.renderReviewForm()}
       {this.renderReviews()}
@@ -70,11 +89,8 @@ class RestaurantProfile extends Component {
   }
 }
 
-function mapDispatchToProps(dispatch){
-  return {
-    addReview: (restaurant_id, user_id, title, comment, star) => dispatch(addReview(restaurant_id, user_id, title, comment, star)),
-    fetchRestaurants: ()=> dispatch(fetchRestaurants())
-  }  
-}
 
-export default connect(null, mapDispatchToProps)(RestaurantProfile)
+
+
+
+export default RestaurantProfile

@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import '../App.css';
 import { connect } from "react-redux";
-import { fetchRestaurants } from '../actions/action'
+import { fetchRestaurants, selectThisRestaurant } from '../actions/action'
 import RestaurantProfile from './RestaurantProfile'
+import NavBar from './NavBar'
 
 
 class Restaurants extends Component {
@@ -10,17 +11,27 @@ class Restaurants extends Component {
   constructor(props){
     super(props);
     this.state = {
-      restaurantId : ""
+      restaurantId : "",
+      restaurants: []
     }
   }
 
   componentDidMount() {
-    this.props.fetchRestaurants()
+    fetch("http://localhost:4000/api/v1/restaurants", {
+      method: 'GET',
+      headers: {
+      Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      }
+    }) 
+    .then(r => r.json())
+    .then((data) => this.setState({restaurants: data}))	
   }
 
   handleOpen = (event) => {
     //console.log(event.target.id)
-    this.setState({ restaurantId: event.target.id})
+    this.setState({restaurantId: event.target.id})
   };
 
   handleClear = () => {
@@ -28,7 +39,7 @@ class Restaurants extends Component {
   }
 
   renderRestaurants = () => {
-    return this.props.restaurants.map(restaurant => (
+    return this.state.restaurants.map(restaurant => (
       <div onClick={this.handleOpen} key={restaurant.id} id={restaurant.id} >{restaurant.name}</div>
     )
 
@@ -37,25 +48,33 @@ class Restaurants extends Component {
 
   render() {
      //console.log("what is props.restaurants", this.props.restaurants)
-    return this.state.restaurantId ? <RestaurantProfile handleClear={this.handleClear} reviews={this.props.reviews} user={this.props.user} restaurant={this.props.restaurants[this.state.restaurantId-1]}/> : <div>{this.renderRestaurants()}</div>
+    return this.state.restaurantId ? 
+    <div>
+    <NavBar handleClear={this.handleClear}/>
+    <RestaurantProfile handleClear={this.handleClear} user={this.props.user} id={this.state.restaurantId} restaurant={this.state.restaurants[this.state.restaurantId-1]}/> 
+    </div>
+    : 
+    <div>
+    <NavBar />
+    {this.renderRestaurants()}
+    </div>
 
   }
 }
 const mapStateToProps = (state) => {
-  console.log("inside restaurants what is state", state.restaurants)
+  console.log("inside restaurants what is state", state)
    return{
-      restaurants: state.restaurants.restaurants,
       user: state.user.user,
-      reviews: state.restaurants.restaurants.reviews
    }
  }
 
- const mapDispatchToProps = (dispatch) => {
-  //console.log("inside profile", dispatch)
+//  const mapDispatchToProps = (dispatch) => {
+//   //console.log("inside profile", dispatch)
   
-  return{
-    fetchRestaurants:()=> dispatch(fetchRestaurants()),
-  }
-}
+//   return{
+//     fetchRestaurants:()=> dispatch(fetchRestaurants()),
+//     selectThisRestaurant: id => dispatch(selectThisRestaurant(id)), 
+//   }
+// }
 
- export default connect(mapStateToProps, mapDispatchToProps)(Restaurants)
+ export default connect(mapStateToProps)(Restaurants)

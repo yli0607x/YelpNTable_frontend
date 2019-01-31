@@ -7,6 +7,7 @@ import './App.css';
 import Login from './Components/Login'
 import SignUp from './Components/SignUp'
 import Restaurants from './Components/Restaurants'
+import Profile from './Components/Profile'
 
 class App extends Component {
   // <Route component={NotFound} />
@@ -16,6 +17,7 @@ class App extends Component {
         <Switch>
           <Route exact path="/" component={Login} />
           <Route exact path="/restaurants" component={Restaurants} />
+          <Route exact path="/profile" component={Profile} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={SignUp} />
         </Switch>

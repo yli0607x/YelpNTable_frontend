@@ -1,9 +1,10 @@
-import { FETCHING_RESTAURANTS, FETCHED_RESTAURANTS, UNFETCH_RESTAURANTS, ADD_REVIEW} from "./types";
+import { FETCHING_RESTAURANTS, FETCHED_RESTAURANTS, UNFETCH_RESTAURANTS, ADD_REVIEW, SELECT_RESTAURANT, DESELECT_RESTAURANT} from "./types";
 
 const initialState = {
     restaurants: [],
 	loadingRestaurants: false,
 	addedReview: false,
+	selectedRestaurant: [],
 	
 }
 
@@ -17,7 +18,12 @@ const restaurantsReducer = (state = initialState, action) => {
 		case UNFETCH_RESTAURANTS: //tells the app we're fetching
 			return { ...state, restaurants: []}
 		case ADD_REVIEW:
-			return { ...state, loadingRestaurants: false, addedReview: true };
+		    //debugger
+			return { ...state, loadingRestaurants: false, addedReview: true, restaurant:action.payload };
+		case SELECT_RESTAURANT:
+			return { ...state, selectedRestaurant: [...state.selectedRestaurant, state.restaurants.find(restaurant => restaurant.id === parseInt(action.payload))] };
+		case DESELECT_RESTAURANT:
+			return { ...state, selectedRestaurant:[] };
 		default:
 			return state
 	}

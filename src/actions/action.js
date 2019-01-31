@@ -1,4 +1,4 @@
-import { FETCHING_RESTAURANTS, FETCHED_RESTAURANTS, ADD_REVIEW } from '../reducers/types.js';
+import { FETCHING_RESTAURANTS, FETCHED_RESTAURANTS, ADD_REVIEW, SELECT_RESTAURANT, DESELECT_RESTAURANT } from '../reducers/types.js';
 
 export const fetchRestaurants = () => { 
 	// takes the token in localStorage and finds out who it belongs to
@@ -15,6 +15,23 @@ export const fetchRestaurants = () => {
     .then(r => r.json())
     .then((data) => dispatch({ type: FETCHED_RESTAURANTS, payload: {restaurants: data} }))	
 	}
+}
+
+export function selectThisRestaurant(id) {
+  return (dispatch) => {
+    dispatch(
+        { type: SELECT_RESTAURANT,
+        payload: id
+        })
+}
+}
+
+export function deSelectThisRestaurant() {
+  return (dispatch) => {
+    dispatch(
+        { type: DESELECT_RESTAURANT
+        })
+}
 }
 
 export const addReview = (restaurant_id, user_id, title, comment, star) => {
