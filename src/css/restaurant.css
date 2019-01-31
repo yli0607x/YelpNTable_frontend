@@ -1,0 +1,6 @@
+.restaurantImage {
+	z-index: 20;
+	top: 0;
+	bottom: 0;
+	position: relative;
+}

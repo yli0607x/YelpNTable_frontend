@@ -40,8 +40,12 @@ class Restaurants extends Component {
   }
 
   renderRestaurants = () => {
+    console.log(this.state.restaurants);
+    debugger
     return this.state.restaurants.map(restaurant => (
-      <div onClick={this.handleOpen} key={restaurant.id} id={restaurant.id} >{restaurant.name}</div>
+      <div className="restaurantImage">{restaurant.name}
+        <img onClick={this.handleOpen} key={restaurant.id} id={restaurant.id} alt={restaurant.id} src={restaurant.restaurant_photo} />
+      </div>
     )
 
     )
