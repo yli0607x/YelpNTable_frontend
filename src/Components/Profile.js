@@ -19,7 +19,12 @@ class Profile extends Component {
       comment: "", 
       star: "",
       reviewOpen: false,
+      reservationOpen: false,
       reviewId: "",
+      partySize: "",
+      time: "",
+      message: "",
+      reservationId: "",
     }
   }
 
@@ -36,6 +41,10 @@ class Profile extends Component {
     .then((data) => this.setState({user: data, reviews: data.reviews, reservations: data.reservations}))	
   }
 
+
+  reviewClose = () => this.setState({ reviewOpen: false })
+  reservationClose = () => this.setState({ reservationOpen: false})
+
   renderUserInfo = () => {
     return <div>
       {this.state.user.first_name}
@@ -44,14 +53,16 @@ class Profile extends Component {
   }
 
   renderReviews = () => {
-    return this.state.reviews.map(review => (
+    var currentUserReviews = this.state.reviews.filter(review => review.user_id === this.props.id)
+    return currentUserReviews.map(review => (
       <div key={review.id} id={review.id}>
+        <div>User {review.user_id}</div>
         <div>Restaurant: {restaurants[review.restaurant_id-1]}</div>
         <div>Title:{review.title}</div>
         <div>Comment:{review.comment}</div>
         <div>Star:{review.star}</div>
         <Button id={review.id} onClick={this.handleDeleteReview}>Delete</Button>
-        <Modal trigger={<Button id={review.id} onClick={this.handleEditReviewSetState}>Edit</Button>} open={this.state.ReviewOpen} >
+        <Modal trigger={<Button id={review.id} onClick={this.handleEditReviewSetState}>Edit</Button>} open={this.state.reviewOpen} onClose={this.reviewClose} closeIcon>
           <Modal.Content >
             <form className="ui form" onSubmit={this.handleSubmitReview} style={{ maxWidth: 400, marginLeft: "auto", marginRight: "auto", display: "block" }}>
             <div className="field">
@@ -94,7 +105,25 @@ class Profile extends Component {
       .then((data) => this.setState({ reviews: data}))
   }
 
-  reviewClose = () => this.setState({ ReviewOpen: false })
+  handleSubmitReservation = (e) => {
+    e.preventDefault()
+    this.reservationClose()
+    fetch(`http://localhost:4000/api/v1/users/${this.props.id}/reservations/${this.state.reservationId}`, {
+        method: 'PATCH',
+        headers: {
+        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          party_size: this.state.partySize,
+          time: this.state.time,
+          message: this.state.message,
+        })
+      }) 
+      .then(r => r.json())
+      .then((data) => this.setState({ reservations: data}))
+  }
 
   handleEditReviewSetState = (event) => {
     var review = this.state.reviews.find(review => review.id === parseInt(event.target.id))
@@ -102,22 +131,60 @@ class Profile extends Component {
       title: review.title,
       comment: review.comment,
       star: review.star, 
-      reviewId: review.id
-    }, ()=> {console.log("after setstate", this.state.title)})
+      reviewId: review.id,
+      reviewOpen: true
+    })
+  }
+
+  handleEditReservationSetState = (event) => {
+    var reservation = this.state.reservations.find(reservation => reservation.id === parseInt(event.target.id))
+    this.setState({
+      partySize: reservation.party_size,
+      time: reservation.time.split(":")[0]+":"+reservation.time.split(":")[1],
+      message: reservation.message,
+      reservationId: reservation.id,
+      reservationOpen: true
+    })
   }
 
   handleChange = (event) => {
     this.setState({[event.target.name]: event.target.value})
   }
 
+  handleChangeDate = (event) => {
+    this.setState({
+      time: event
+    });
+  }
+
   renderReservations = () => {
     return this.state.reservations.map(reservation => (
       <div key={reservation.id} id={reservation.id}>
+        <div>User {reservation.user_id}</div>
         <div>Restaurant: {restaurants[reservation.restaurant_id-1]}</div>
         <div>Party Size: {reservation.party_size}</div>
-        <div>Date: {reservation.date}</div>
+        <div>Date: {reservation.time.split(":")[0]+":"+reservation.time.split(":")[1]}</div>
         <div>Message: {reservation.message}</div>
-        <button id={reservation.id} onClick={this.handleDeleteReservation}>Delete</button>
+        <Button id={reservation.id} onClick={this.handleDeleteReservation}>Delete</Button>
+        <Modal trigger={<Button id={reservation.id} onClick={this.handleEditReservationSetState}>Edit</Button>} open={this.state.reservationOpen} onClose={this.reservationClose} closeIcon>
+          <Modal.Content >
+            <form className="ui form" onSubmit={this.handleSubmitReservation} style={{ maxWidth: 400, marginLeft: "auto", marginRight: "auto", display: "block" }}>
+            <div className="field">
+              <label>Title</label>
+              <input type="text" name="partySize" placeholder={this.state.partySize} onChange={this.handleChange}/>
+            </div>
+            <div className="field">
+              <label>Date</label>
+              <input type="datetime-local" name="time" step="0" value={this.state.time} onChange={this.handleChange}/>
+            </div>
+            <div className="field">
+              <label>Rating</label>
+              <input type="text" name="message" placeholder={this.state.message} onChange={this.handleChange}/>
+            </div>
+            <button className="ui button" type="submit" onClick={this.handleSubmitReservation} >Submit</button>
+          </form>
+          </Modal.Content>
+        </Modal>
       </div>
     )) 
   } 
@@ -152,7 +219,7 @@ class Profile extends Component {
   render() {
    //console.log("are restaurants coming in?", this.props)
    //debugger
-   //console.log("inside profile", this.props.isLoggedIn)
+   console.log("inside profile what is date", this.state.time)
     return this.props.isLoggedIn === true ?
       <div>
       <NavBar />
