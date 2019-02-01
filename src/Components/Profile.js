@@ -102,7 +102,16 @@ class Profile extends Component {
         })
       }) 
       .then(r => r.json())
-      .then((data) => this.setState({ reviews: data}))
+      .then(() => fetch(`http://localhost:4000/api/v1/users/${this.props.id}`, {
+        method: 'GET',
+        headers: {
+        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        }
+      }) 
+      .then(r => r.json())
+      .then((data) => this.setState({user: data, reviews: data.reviews, reservations: data.reservations})))
   }
 
   handleSubmitReservation = (e) => {
@@ -122,7 +131,16 @@ class Profile extends Component {
         })
       }) 
       .then(r => r.json())
-      .then((data) => this.setState({ reservations: data}))
+      .then(() => fetch(`http://localhost:4000/api/v1/users/${this.props.id}`, {
+        method: 'GET',
+        headers: {
+        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        }
+      }) 
+      .then(r => r.json())
+      .then((data) => this.setState({user: data, reviews: data.reviews, reservations: data.reservations})))
   }
 
   handleEditReviewSetState = (event) => {
