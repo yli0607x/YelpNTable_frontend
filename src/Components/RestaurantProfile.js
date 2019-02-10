@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import '../App.css';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { Button, Header, Image, Modal } from 'semantic-ui-react'
+import { Button, Modal } from 'semantic-ui-react'
+import MapContainer from './MapContainer';
 
 
 class RestaurantProfile extends Component {
@@ -155,6 +155,7 @@ class RestaurantProfile extends Component {
       Restaurant Description: {this.state.restaurant.description}
       <br></br>
       <br></br>
+      <MapContainer latitude={this.state.restaurant.latitude} longitude={this.state.restaurant.longitude} />
       Reviews
       {this.renderReviews()}
       <hr></hr>

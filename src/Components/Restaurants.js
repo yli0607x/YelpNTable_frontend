@@ -40,11 +40,11 @@ class Restaurants extends Component {
   }
 
   renderRestaurants = () => {
-    console.log(this.state.restaurants);
+    //console.log(this.state.restaurants);
     return this.state.restaurants.map(restaurant => (
       
  
-        <div className="article">
+        <div className="article" key={restaurant.id}>
         <span className="caption" onClick={this.handleOpen} id={restaurant.id} key={restaurant.id} >
           <span className="caption-content">
           <h1 className="article-title"> {restaurant.name} </h1>
@@ -79,7 +79,7 @@ class Restaurants extends Component {
   }
 }
 const mapStateToProps = (state) => {
-  console.log("inside restaurants what is state", state)
+  //console.log("inside restaurants what is state", state)
    return{
       user: state.user.user,
       isLoggedIn: state.user.isLoggedIn,

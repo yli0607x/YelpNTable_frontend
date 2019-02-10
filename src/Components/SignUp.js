@@ -1,7 +1,7 @@
 import React from 'react'
 import { SignUpUser } from "../actions/userActions";
 import { connect } from 'react-redux'
-import { Button, Form, Grid, Header, Image, Segment, Checkbox } from 'semantic-ui-react'
+import { Button, Form, Grid, Header, Segment, Checkbox } from 'semantic-ui-react'
 import { Redirect } from "react-router";
 
 class SignUp extends React.Component {

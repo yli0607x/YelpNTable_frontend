@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import '../App.css';
 import NavBar from './NavBar'
 import { connect } from "react-redux";
-import { Button, Header, Image, Modal } from 'semantic-ui-react'
-import { withRouter, Redirect } from "react-router";
+import { Button, Modal } from 'semantic-ui-react'
+import {Redirect } from "react-router";
 
 const restaurants = ["Chef's Table at Brooklyn Fare",'Peter Luger','Carbone', 'Uchu', 'Root & Bone', 'Turntable Chicken Jazz', 'Obao', 'La Contena']
 
