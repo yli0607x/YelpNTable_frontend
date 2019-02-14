@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import '../App.css';
 import "react-datepicker/dist/react-datepicker.css";
-import { Button, Modal } from 'semantic-ui-react'
+import { Button, Modal, Rating, Card, Image } from 'semantic-ui-react'
 import MapContainer from './MapContainer';
 
 
@@ -129,13 +129,34 @@ class RestaurantProfile extends Component {
 
   renderReviews = () => {
       return this.state.restaurant.reviews.map(review => (
-        <div key={review.id}>
-          <div>Title: {review.title}</div>
-          <div>Comment: {review.comment}</div>
-          <div>Star: {review.star}</div>
-        </div>
+        <Card>
+          <Card.Content>
+            <Image floated='right' size='mini' src='/images/avatar/large/steve.jpg' />
+            <Card.Header>{review.title}</Card.Header>
+            <Card.Meta><Rating icon='star' defaultRating={review.star}/></Card.Meta>
+            <Card.Description>{review.comment}</Card.Description>
+          </Card.Content>
+        </Card>
       )) 
   }
+
+  renderAverageReviews = () => {
+    let total = 0
+    let numberOfReviews = this.state.restaurant.reviews.length
+    this.state.restaurant.reviews.map(review => (
+      total += review.star
+    ))
+    return <div><Rating icon='star' defaultRating={total/numberOfReviews}/> {this.state.restaurant.reviews.length} reviews </div>
+  }
+
+  renderImages = () => {
+    return this.state.restaurant.photos.map(photo => (
+ 
+      <img id={photo.id} alt={photo.id} src={photo.url} height="200px"/>
+    ))
+  }
+
+  
   
   
 
@@ -143,27 +164,35 @@ class RestaurantProfile extends Component {
   render() {
     //console.log("what is reservation date in profile", this.state.date)
     //debugger
-    console.log("what is date", this.state.time)
+    console.log("what is restaurant", this.state.restaurant)
     return (
-     <div>
-      Restaurant Name: {this.state.restaurant.name}
-      <br></br>
-      <br></br>
-      Restaurant Address: {this.state.restaurant.address}
-      <br></br>
-      <br></br>
-      Restaurant Description: {this.state.restaurant.description}
-      <br></br>
-      <br></br>
-      <MapContainer latitude={this.state.restaurant.latitude} longitude={this.state.restaurant.longitude} />
-      Reviews
-      {this.renderReviews()}
-      <hr></hr>
-      {this.renderReviewForm()}
-      <br></br>
-      <br></br>
-      {this.renderReservationForm()}
-     </div>
+    <div> 
+      <div >
+        <div className="column">
+          <div className="restaurant name">{this.state.restaurant.name}</div>
+          <div className="restaurant average review">{this.renderAverageReviews()}</div>
+          <div className="restaurant info">{this.state.restaurant.info}</div>
+          <hr></hr>
+          <div className="restaurant description">{this.state.restaurant.description}</div> 
+        </div>  
+        <div className="column ">
+          Location
+          <div className="restaurant address">{this.state.restaurant.address}</div>
+          <MapContainer latitude={this.state.restaurant.latitude} longitude={this.state.restaurant.longitude} />
+        </div>  
+        <div className="column">
+        Reviews
+          {this.renderReviews()}
+          <hr></hr>
+          {this.renderReviewForm()}
+          <br></br>
+          <br></br>
+          {this.renderReservationForm()}
+        </div>
+      </div>
+      <div className="row"></div> 
+      <div className="row">{this.renderImages()} </div> 
+    </div>   
     )
   }
 }

@@ -30,3 +30,27 @@
     transform: rotate(360deg);
   }
 }
+
+div.login-form {
+  /* background-image: url('./login-background.png'); */
+  background-image: url("../src/Components/user.jpg");
+  background-repeat:no-repeat;
+  background-size:cover;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+}
+
+.column {
+  float: left;
+  width: 33.33%;
+  padding: 10px;
+  height: 400px; /* Should be removed. Only for demonstration */
+}
+
+.restaruant-photo {
+  height: 200px;
+  width: 200px;
+  overflow: hidden;
+
+}

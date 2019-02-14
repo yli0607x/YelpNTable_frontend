@@ -18,7 +18,7 @@ class MapContainer extends Component {
         location={{lat: this.props.latitude, lng: this.props.longitude}}
         googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${API_KEY}&v=3.exp&libraries=geometry,drawing,places`}
         loadingElement={<div style={{ height: `100%` }} />}
-        containerElement={<div style={{ height: `400px`, width: `400px` }} />}
+        containerElement={<div style={{ height: `350px`, width: `350px` }} />}
         mapElement={<div style={{ height: `100%` }} />}
         />
        
